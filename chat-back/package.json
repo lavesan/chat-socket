@@ -1,0 +1,33 @@
+{
+  "name": "chat-socket",
+  "version": "0.0.0",
+  "description": "Chat using socket.io and node.js",
+  "private": true,
+  "scripts": {
+    "start": "node ./bin/www"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/lavesan/chat-socket.git"
+  },
+  "keywords": [
+    "socket",
+    "chat",
+    "node"
+  ],
+  "author": "Valdery Alves Paes Júnior (http://valderyalves.com) <valdery.jur@gmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/lavesan/chat-socket/issues"
+  },
+  "homepage": "https://github.com/lavesan/chat-socket#readme",
+  "dependencies": {
+    "cookie-parser": "~1.4.4",
+    "debug": "~2.6.9",
+    "ejs": "~2.6.1",
+    "express": "~4.16.1",
+    "http-errors": "~1.6.3",
+    "morgan": "~1.9.1",
+    "socket.io": "^4.1.3"
+  }
+}
