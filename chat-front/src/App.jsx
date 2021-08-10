@@ -9,25 +9,11 @@ import AppContext from './App.context';
 import UserModal from './components/molecules/UserModal';
 
 function App() {
-  const [msgs, setMsgs] = useState({
-    doidao: [
-      {
-        group: 'doidao', name: 'Valdery', date: new Date(), msg: 'Vou cagar.',
-      },
-      {
-        group: 'doidao', name: 'Eu', date: new Date(), msg: 'Apois vá',
-      },
-      {
-        group: 'doidao', name: 'Valdery', date: new Date(), msg: 'Fui e voltei',
-      },
-    ],
-    meFudi: [{
-      group: 'Me fudi', name: 'Algo', date: new Date(), msg: 'vem cá',
-    }],
-  });
+  const [msgs, setMsgs] = useState({});
   const [selectedGroup, setSelectedGroup] = useState('');
   const [userName, setUserName] = useState('');
   const [modalUser, setModalUser] = useState(true);
+  const [newMsgs, setNewMsgs] = useState({});
 
   const socket = io('http://localhost:3001');
 
@@ -42,6 +28,19 @@ function App() {
         msg,
       ],
     }));
+
+    console.log('msg: ', msg);
+    console.log('msg.name: ', msg.name);
+    console.log('userName: ', userName);
+    console.log('verificar: ', msg.name != userName);
+
+    if (msg.name != userName) {
+      console.log('entrou po...');
+      setNewMsgs((actualCount) => ({
+        ...actualCount,
+        [msg.group]: actualCount[msg.group] + 1,
+      }));
+    }
   };
 
   const emitMsg = (msg) => {
@@ -50,15 +49,26 @@ function App() {
 
   useEffect(() => {
     setUserName('Eu');
-    socket.on('message received', (msg) => addMsg(msg));
+    socket.on('send message', (msg) => addMsg(msg));
 
     // Load saved msgs
-    axios.get('http://localhost:3001/msgs')
+    axios.get('http://localhost:3001/chat')
       .then((res) => {
         setMsgs(res.data);
       })
       .catch((err) => console.error('deu pau: ', err));
   }, []);
+
+  // Empties the new msg alert for the group
+  useEffect(
+    () => {
+      setNewMsgs((actualCount) => ({
+        ...actualCount,
+        [selectedGroup]: 0,
+      }));
+    },
+    [selectedGroup],
+  );
 
   return (
     <ThemeProvider theme={theme}>
@@ -71,6 +81,8 @@ function App() {
         emitMsg,
         modalUser,
         setModalUser,
+        newMsgs,
+        setNewMsgs,
       }}
       >
         <div className="App">
