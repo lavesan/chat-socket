@@ -1,8 +1,8 @@
 import React, { useState, useContext, useMemo } from 'react';
 import {
-  List, ListItem, ListItemText, Divider, Drawer, Hidden, Avatar, Grid, ListItemSecondaryAction,
+  List, ListItem, ListItemText, Divider, Drawer, Hidden, Avatar, Grid, AppBar, Toolbar, IconButton, useMediaQuery,
 } from '@material-ui/core';
-// import MenuIcon from '@material-ui/icons/Menu';
+import MenuIcon from '@material-ui/icons/Menu';
 import { makeStyles } from '@material-ui/styles';
 import AppContext from '../../App.context';
 import photo from '../../assets/sad face.png';
@@ -16,6 +16,9 @@ const useStyles = makeStyles((theme) => ({
     width: 160,
     borderRight: `2px solid ${theme.palette.primary.main}`,
     backgroundColor: theme.palette.secondary.main,
+  },
+  mobileDrawer: {
+    width: 0,
   },
   selectedItem: {
     backgroundColor: theme.palette.primary.main,
@@ -38,7 +41,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const SidebarContent = () => {
+const SidebarContent = ({ toogleOpen }) => {
   const classes = useStyles();
 
   const {
@@ -46,6 +49,7 @@ const SidebarContent = () => {
     setSelectedGroup,
     selectedGroup,
     newMsgs,
+    userName,
   } = useContext(AppContext);
 
   const arrMsgs = useMemo(
@@ -58,6 +62,7 @@ const SidebarContent = () => {
 
   const onItemClick = (group) => {
     setSelectedGroup(group);
+    toogleOpen(false);
   };
 
   const itemClass = (groupName) => {
@@ -73,9 +78,15 @@ const SidebarContent = () => {
       <Grid container justifyContent="center">
         <Avatar
           alt="Minha foto"
-          src={photo}
+          src="https://www.provelozuerich.ch/wp-content/uploads/2019/10/neuschrott.jpg"
           className={classes.avatar}
         />
+      </Grid>
+      <Grid
+        container
+        justifyContent="center"
+      >
+        {userName}
       </Grid>
       <Divider />
       <List>
@@ -88,7 +99,6 @@ const SidebarContent = () => {
           >
             <ListItemText primary={group} />
             {itemNewMsg(group) && (
-            // <ListItemSecondaryAction>
             <Grid
               container
               justifyContent="center"
@@ -97,7 +107,6 @@ const SidebarContent = () => {
             >
               {itemNewMsg(group)}
             </Grid>
-            // </ListItemSecondaryAction>
             )}
           </ListItem>
         ))}
@@ -111,25 +120,33 @@ const Sidebar = () => {
 
   const [open, setOpen] = useState(false);
 
-  const toogleOpen = () => setOpen((actualOpen) => !actualOpen);
+  const toogleOpen = (value) => {
+    setOpen((actualOpen) => (typeof value === 'boolean' ? value : !actualOpen));
+  };
 
   return (
     <>
       <Hidden smUp implementation="css">
+        <AppBar position="static">
+          <Toolbar>
+            <IconButton edge="start" color="inherit" aria-label="menu" onClick={toogleOpen}>
+              <MenuIcon />
+            </IconButton>
+          </Toolbar>
+        </AppBar>
         <Drawer
-        //   container={container}
           variant="persistent"
           anchor="left"
           open={open}
           onClose={toogleOpen}
           classes={{
-            // paper: classes.drawerPaper,
+            root: classes.mobileDrawer,
           }}
           ModalProps={{
             keepMounted: true, // Better open performance on mobile.
           }}
         >
-          <SidebarContent />
+          <SidebarContent toogleOpen={toogleOpen} />
         </Drawer>
       </Hidden>
       <Hidden xsDown implementation="css">
@@ -142,7 +159,7 @@ const Sidebar = () => {
           anchor="left"
           open
         >
-          <SidebarContent />
+          <SidebarContent toogleOpen={toogleOpen} />
         </Drawer>
       </Hidden>
     </>
