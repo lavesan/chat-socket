@@ -29,13 +29,9 @@ function App() {
       ],
     }));
 
-    console.log('msg: ', msg);
-    console.log('msg.name: ', msg.name);
-    console.log('userName: ', userName);
-    console.log('verificar: ', msg.name != userName);
+    const name = sessionStorage.getItem('user_name');
 
-    if (msg.name != userName) {
-      console.log('entrou po...');
+    if (msg.name != name) {
       setNewMsgs((actualCount) => ({
         ...actualCount,
         [msg.group]: actualCount[msg.group] + 1,
@@ -48,7 +44,6 @@ function App() {
   };
 
   useEffect(() => {
-    setUserName('Eu');
     socket.on('send message', (msg) => addMsg(msg));
 
     // Load saved msgs

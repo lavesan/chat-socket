@@ -24,7 +24,9 @@ const useStyles = makeStyles((theme) => ({
 const UserModal = () => {
   const classes = useStyles();
 
-  const { modalUser, setModalUser, setUserName } = useContext(AppContext);
+  const {
+    modalUser, setModalUser, setUserName, userName,
+  } = useContext(AppContext);
   const [name, setName] = useState('');
 
   const handleClose = (reason) => {
@@ -37,6 +39,7 @@ const UserModal = () => {
     event.preventDefault();
     if (!name) return;
     setUserName(name);
+    sessionStorage.setItem('user_name', name);
     handleClose();
   };
 
