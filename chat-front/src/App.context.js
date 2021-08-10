@@ -5,4 +5,8 @@ export default React.createContext({
   selectedGroup: () => '',
   setSelectedGroup: (selected) => {},
   userName: '',
+  setUserName: (name) => {},
+  emitMsg: (msg) => {},
+  modalUser: false,
+  setModalUser: (open) => {},
 });
