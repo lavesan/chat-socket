@@ -1,11 +1,35 @@
 import React, { useState, useContext, useMemo } from 'react';
 import {
-  List, ListItem, ListItemText, Divider, Drawer, Hidden,
+  List, ListItem, ListItemText, Divider, Drawer, Hidden, Avatar, Grid,
 } from '@material-ui/core';
 // import MenuIcon from '@material-ui/icons/Menu';
+import { makeStyles } from '@material-ui/styles';
 import AppContext from '../../App.context';
+import photo from '../../assets/sad face.png';
+
+const useStyles = makeStyles((theme) => ({
+  drawer: {
+    width: 160,
+    flexShrink: 0,
+  },
+  drawerPaper: {
+    width: 160,
+    borderRight: `2px solid ${theme.palette.primary.main}`,
+    backgroundColor: theme.palette.secondary.main,
+  },
+  selectedItem: {
+    backgroundColor: theme.palette.primary.main,
+  },
+  avatar: {
+    margin: '8px 0',
+    width: 80,
+    height: 80,
+  },
+}));
 
 const SidebarContent = () => {
+  const classes = useStyles();
+
   const { msgs, setSelectedGroup, selectedGroup } = useContext(AppContext);
 
   const arrMsgs = useMemo(
@@ -17,17 +41,34 @@ const SidebarContent = () => {
   );
 
   const onItemClick = (group) => {
-    console.log('group: ', group);
     setSelectedGroup(group);
+  };
+
+  const itemClass = (groupName) => {
+    const obj = {};
+    if (groupName === selectedGroup) obj.root = classes.selectedItem;
+    return obj;
   };
 
   return (
     <div>
+      <Grid container justifyContent="center">
+        <Avatar
+          alt="Minha foto"
+          src={photo}
+          className={classes.avatar}
+        />
+      </Grid>
       <Divider />
       <List>
         {arrMsgs.map(([group, data]) => (
-          <ListItem button key={group}>
-            <ListItemText primary={group} onClick={() => onItemClick(group)} />
+          <ListItem
+            button
+            key={group}
+            classes={itemClass(group)}
+            onClick={() => onItemClick(group)}
+          >
+            <ListItemText primary={group} />
           </ListItem>
         ))}
       </List>
@@ -36,6 +77,8 @@ const SidebarContent = () => {
 };
 
 const Sidebar = () => {
+  const classes = useStyles();
+
   const [open, setOpen] = useState(false);
 
   const toogleOpen = () => setOpen((actualOpen) => !actualOpen);
@@ -45,7 +88,7 @@ const Sidebar = () => {
       <Hidden smUp implementation="css">
         <Drawer
         //   container={container}
-          variant="temporary"
+          variant="persistent"
           anchor="left"
           open={open}
           onClose={toogleOpen}
@@ -61,10 +104,12 @@ const Sidebar = () => {
       </Hidden>
       <Hidden xsDown implementation="css">
         <Drawer
+          className={classes.drawer}
           classes={{
-            // paper: classes.drawerPaper,
+            paper: classes.drawerPaper,
           }}
-          variant="permanent"
+          variant="persistent"
+          anchor="left"
           open
         >
           <SidebarContent />
