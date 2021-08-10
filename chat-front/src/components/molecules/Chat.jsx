@@ -1,4 +1,6 @@
-import React, { useContext, useMemo } from 'react';
+import React, {
+  useContext, useMemo, useRef, useEffect,
+} from 'react';
 import { Grid, Divider } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
 import AppContext from '../../App.context';
@@ -11,7 +13,8 @@ const useStyles = makeStyles({
   },
   messagesMap: {
     overflowY: 'scroll',
-    padding: '0 8px',
+    overflowX: 'hidden',
+    padding: '0 8px 8px 8px',
     flexGrow: 1,
   },
   messageContainer: {
@@ -21,6 +24,8 @@ const useStyles = makeStyles({
 
 const Chat = () => {
   const classes = useStyles();
+
+  const endChatRef = useRef(null);
 
   const { selectedGroup, msgs } = useContext(AppContext);
 
@@ -34,10 +39,15 @@ const Chat = () => {
     [selectedGroup],
   );
 
+  useEffect(() => {
+    if (endChatRef.current) { endChatRef.current.scrollIntoView(); }
+  }, [selectedGroup]);
+
   return (
     <Grid
       container
       direction="column"
+      wrap="nowrap"
       classes={{ root: classes.container }}
       justifyContent="space-between"
     >
@@ -45,9 +55,11 @@ const Chat = () => {
         item
         container
         direction="column"
+        wrap="nowrap"
         classes={{ root: classes.messagesMap }}
       >
         {chatMsgs.map((msg) => <Message className={classes.messageContainer} {...msg} />)}
+        <div ref={endChatRef} />
       </Grid>
       <Grid
         item
