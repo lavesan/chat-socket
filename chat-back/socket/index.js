@@ -21,10 +21,9 @@ const connect = () => {
         socket.on('chat message', function(msg){
             console.log('message: ' + msg);
             // Se eu quisesse salvar o chat no db, posso chamar uma função aqui dentro
-            const savedMsg = saveMsgOnDB(msg);
-            console.log('saved message: ' + savedMsg);
+            saveMsgOnDB(msg);
             // Emite para os usuários do io
-            io.emit('chat message', msg);
+            io.emit('send message', msg);
         });
 
         socket.on('disconnect', function(){
