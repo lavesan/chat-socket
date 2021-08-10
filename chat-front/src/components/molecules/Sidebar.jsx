@@ -1,6 +1,6 @@
 import React, { useState, useContext, useMemo } from 'react';
 import {
-  List, ListItem, ListItemText, Divider, Drawer, Hidden, Avatar, Grid,
+  List, ListItem, ListItemText, Divider, Drawer, Hidden, Avatar, Grid, ListItemSecondaryAction,
 } from '@material-ui/core';
 // import MenuIcon from '@material-ui/icons/Menu';
 import { makeStyles } from '@material-ui/styles';
@@ -25,12 +25,28 @@ const useStyles = makeStyles((theme) => ({
     width: 80,
     height: 80,
   },
+  newMsgs: {
+    borderRadius: '50%',
+    backgroundColor: '#f20000',
+    color: '#fff',
+    width: 16,
+    height: 16,
+    fontSize: 8,
+    top: 8,
+    right: 4,
+    position: 'absolute',
+  },
 }));
 
 const SidebarContent = () => {
   const classes = useStyles();
 
-  const { msgs, setSelectedGroup, selectedGroup } = useContext(AppContext);
+  const {
+    msgs,
+    setSelectedGroup,
+    selectedGroup,
+    newMsgs,
+  } = useContext(AppContext);
 
   const arrMsgs = useMemo(
     () => {
@@ -49,6 +65,8 @@ const SidebarContent = () => {
     if (groupName === selectedGroup) obj.root = classes.selectedItem;
     return obj;
   };
+
+  const itemNewMsg = (groupName) => (newMsgs[groupName] > 0 ? newMsgs[groupName] : false);
 
   return (
     <div>
@@ -69,6 +87,18 @@ const SidebarContent = () => {
             onClick={() => onItemClick(group)}
           >
             <ListItemText primary={group} />
+            {itemNewMsg(group) && (
+            // <ListItemSecondaryAction>
+            <Grid
+              container
+              justifyContent="center"
+              alignItems="center"
+              classes={{ root: classes.newMsgs }}
+            >
+              {itemNewMsg(group)}
+            </Grid>
+            // </ListItemSecondaryAction>
+            )}
           </ListItem>
         ))}
       </List>
