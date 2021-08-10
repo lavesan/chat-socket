@@ -9,4 +9,6 @@ export default React.createContext({
   emitMsg: (msg) => {},
   modalUser: false,
   setModalUser: (open) => {},
+  newMsgs: () => ({}),
+  setNewMsgs: (countMsgs) => {},
 });
