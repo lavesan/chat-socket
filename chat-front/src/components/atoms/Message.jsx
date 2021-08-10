@@ -8,10 +8,23 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: 3,
     backgroundColor: theme.palette.primary.main,
     padding: 8,
+    width: 'fit-content',
+    fontWeight: 'normal',
+    boxShadow: '2px 2px 5px #e3e3e3',
+  },
+  nameText: {
+    margin: '0 0 8px 0',
+    color: '#fff',
+  },
+  hourText: {
+    margin: '0 0 8px 0',
+    fontSize: 8,
   },
 }));
 
-const Message = ({ msg, date, name }) => {
+const Message = ({
+  msg, date, name, ...props
+}) => {
   const classes = useStyles();
 
   const { userName } = useContext(AppContext);
@@ -22,13 +35,14 @@ const Message = ({ msg, date, name }) => {
     <Grid
       container
       justifyContent={isMsgFromUser ? 'flex-end' : 'flex-start'}
+      {...props}
     >
       <Grid item container classes={{ root: classes.container }}>
         <Grid item container justifyContent="space-between">
-          <p>
-            {name}
+          <p className={classes.nameText}>
+            {isMsgFromUser ? '' : name}
           </p>
-          <p>
+          <p className={classes.hourText}>
             {date.toLocaleString()}
           </p>
         </Grid>
