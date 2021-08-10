@@ -43,7 +43,7 @@ const Message = ({
             {isMsgFromUser ? '' : name}
           </p>
           <p className={classes.hourText}>
-            {date.toLocaleString()}
+            {new Date(date).toLocaleString()}
           </p>
         </Grid>
         <Grid item>
