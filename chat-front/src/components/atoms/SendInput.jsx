@@ -33,6 +33,8 @@ const SendInput = () => {
       date: new Date(),
       group: selectedGroup,
     });
+
+    inputRef.current.value = '';
   };
 
   return (
@@ -49,6 +51,7 @@ const SendInput = () => {
           autoFocus
           fullWidth
           name="message"
+          autoComplete="off"
           inputRef={inputRef}
         />
       </Grid>
