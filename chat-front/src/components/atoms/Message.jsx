@@ -1,0 +1,43 @@
+import React, { useContext, useMemo } from 'react';
+import { Grid } from '@material-ui/core';
+import { makeStyles } from '@material-ui/styles';
+import AppContext from '../../App.context';
+
+const useStyles = makeStyles((theme) => ({
+  container: {
+    borderRadius: 3,
+    backgroundColor: theme.palette.primary.main,
+    padding: 8,
+  },
+}));
+
+const Message = ({ msg, date, name }) => {
+  const classes = useStyles();
+
+  const { userName } = useContext(AppContext);
+
+  const isMsgFromUser = useMemo(() => name === userName, [name, userName]);
+
+  return (
+    <Grid
+      container
+      justifyContent={isMsgFromUser ? 'flex-end' : 'flex-start'}
+    >
+      <Grid item container classes={{ root: classes.container }}>
+        <Grid item container justifyContent="space-between">
+          <p>
+            {name}
+          </p>
+          <p>
+            {date.toLocaleString()}
+          </p>
+        </Grid>
+        <Grid item>
+          {msg}
+        </Grid>
+      </Grid>
+    </Grid>
+  );
+};
+
+export default Message;
